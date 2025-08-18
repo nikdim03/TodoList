@@ -106,6 +106,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				46F1CBD82E535E3600C493F5 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				4616C6422E52159C0046F269 /* TodoList */,
@@ -195,6 +196,9 @@
 			);
 			mainGroup = 4616C6372E52159C0046F269;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				46F1CBD62E535E2400C493F5 /* XCRemoteSwiftPackageReference "SwiftLint" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4616C6412E52159C0046F269 /* Products */;
 			projectDirPath = "";
@@ -265,6 +269,10 @@
 			isa = PBXTargetDependency;
 			target = 4616C63F2E52159C0046F269 /* TodoList */;
 			targetProxy = 4616C65D2E52159E0046F269 /* PBXContainerItemProxy */;
+		};
+		46F1CBD82E535E3600C493F5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 46F1CBD72E535E3600C493F5 /* SwiftLintBuildToolPlugin */;
 		};
 /* End PBXTargetDependency section */
 
@@ -400,6 +408,8 @@
 				DEVELOPMENT_TEAM = J25YA2CZDR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Нужен доступ к микрофону для голосового ввода поиска";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Приложению нужен доступ к распознаванию речи для диктовки текста поиска";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -428,6 +438,8 @@
 				DEVELOPMENT_TEAM = J25YA2CZDR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Нужен доступ к микрофону для голосового ввода поиска";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Приложению нужен доступ к распознаванию речи для диктовки текста поиска";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -558,6 +570,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		46F1CBD62E535E2400C493F5 /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/SwiftLint";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.59.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		46F1CBD72E535E3600C493F5 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 46F1CBD62E535E2400C493F5 /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4616C6382E52159C0046F269 /* Project object */;
 }

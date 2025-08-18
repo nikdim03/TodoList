@@ -24,11 +24,42 @@ final class TodoListUITests: XCTestCase {
 
     @MainActor
     func testExample() throws {
-        // UI tests must launch the application that they test.
         let app = XCUIApplication()
         app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        // Add new task via plus button then cancel (detail auto-saves only if dirty)
+        let addButton = app.buttons["plus"]
+        if addButton.exists { addButton.tap() }
+        // Enter title
+        let titleField = app.textFields["detail_title_field"]
+        if titleField.waitForExistence(timeout: 2) {
+            titleField.tap()
+            titleField.typeText("UITest Task")
+            app.navigationBars.buttons.element(boundBy: 0).tap()  // back
+        }
+        // Verify task appears
+        XCTAssertTrue(
+            app.staticTexts["UITest Task"].waitForExistence(timeout: 2)
+        )
+        // Open then close detail again via back button
+        let cell = app.staticTexts["UITest Task"].firstMatch
+        if cell.exists {
+            cell.tap()
+            app.navigationBars.buttons.element(boundBy: 0).tap()
+        }
+        // Search for task
+        let searchField = app.searchFields.firstMatch
+        if searchField.waitForExistence(timeout: 2) {
+            searchField.tap()
+            searchField.typeText("UITest Task")
+        }
+        XCTAssertTrue(app.staticTexts["UITest Task"].exists)
+        // Delete task via context menu (long press not easily in UI tests; swipe instead)
+        let tablesQuery = app.tables
+        if tablesQuery.cells.firstMatch.waitForExistence(timeout: 2) {
+            let first = tablesQuery.cells.firstMatch
+            first.swipeLeft()
+            if first.buttons["Delete"].exists { first.buttons["Delete"].tap() }
+        }
     }
 
     @MainActor
