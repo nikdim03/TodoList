@@ -17,10 +17,10 @@ struct TodoListView: View {
         NavigationStack(path: $router.path) {
             VStack(spacing: 0) {
                 searchBar
-                Spacer().frame(height: 16)
+                Spacer().frame(height: Metrics.listTopSpacer)
                 listContent
             }
-            .navigationTitle("Задачи")
+            .navigationTitle(Strings.navTasksTitle)
             .navigationBarTitleDisplayMode(.large)
             .onAppear { presenter.onAppear() }
             .navigationDestination(for: TodoListRoute.self) { route in
@@ -34,13 +34,13 @@ struct TodoListView: View {
 
     // MARK: - UI Components
     private var searchBar: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "magnifyingglass").foregroundStyle(
+        HStack(spacing: Metrics.taskTextStackSpacing * 2) {
+            Image(systemName: Icons.search).foregroundStyle(
                 .brandLightGray
             )
             ZStack(alignment: .leading) {
                 if search.isEmpty {
-                    Text("Search").font(AppFont.search).foregroundColor(
+                    Text(Strings.searchPlaceholder).font(AppFont.search).foregroundColor(
                         .brandLightGray
                     )
                 }
@@ -56,7 +56,7 @@ struct TodoListView: View {
                     search = ""
                     presenter.onSearch("")
                 } label: {
-                    Image(systemName: "xmark.circle.fill").foregroundStyle(
+                    Image(systemName: Icons.clearText).foregroundStyle(
                         .tertiary
                     )
                 }
@@ -65,23 +65,20 @@ struct TodoListView: View {
             Button {
                 presenter.onMicTapped()
             } label: {
-                Image(
-                    systemName: presenter.isDictating
-                        ? "stop.circle.fill" : "mic.fill"
-                )
+                Image(systemName: presenter.isDictating ? Icons.micStop : Icons.mic)
                 .font(IconFont.mic)
-                .frame(width: 36, height: 36)
+                .frame(width: Metrics.searchMicFrame, height: Metrics.searchMicFrame)
                 .foregroundStyle(.brandLightGray)
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
+        .padding(.horizontal, Metrics.searchBarHorizontalPad)
+        .padding(.vertical, Metrics.searchBarVerticalPad)
         .background(
-            RoundedRectangle(cornerRadius: 12).fill(Color.brandDarkGray)
+            RoundedRectangle(cornerRadius: Metrics.searchBarCornerRadius).fill(Color.brandDarkGray)
         )
-        .padding(.horizontal, 16)
+        .padding(.horizontal, LayoutPadding.screenHorizontal)
     }
 
     private var listContent: some View {
@@ -94,7 +91,7 @@ struct TodoListView: View {
                     } open: {
                         presenter.onSelect(id: viewModel.id)
                     }
-                    .blur(radius: activeContextMenuTaskId != nil ? 4 : 0)
+                    .blur(radius: activeContextMenuTaskId != nil ? Metrics.blurRadiusActiveContextMenu : 0)
                     .id(viewModel.id)
                     .contentShape(Rectangle())
                     .onTapGesture { presenter.onSelect(id: viewModel.id) }
@@ -103,9 +100,9 @@ struct TodoListView: View {
                             presenter.onSelect(id: viewModel.id)
                         } label: {
                             Label {
-                                Text("Редактировать")
+                                Text(Strings.contextEdit)
                             } icon: {
-                                Image("icon_edit").renderingMode(.template)
+                                Image(Icons.edit).renderingMode(.template)
                             }
                         }
                         Button {
@@ -113,18 +110,18 @@ struct TodoListView: View {
                             showShare = true
                         } label: {
                             Label {
-                                Text("Поделиться")
+                                Text(Strings.contextShare)
                             } icon: {
-                                Image("icon_share").renderingMode(.template)
+                                Image(Icons.share).renderingMode(.template)
                             }
                         }
                         Button(role: .destructive) {
                             presenter.onDelete(id: viewModel.id)
                         } label: {
                             Label {
-                                Text("Удалить")
+                                Text(Strings.contextDelete)
                             } icon: {
-                                Image("icon_delete").renderingMode(.template)
+                                Image(Icons.delete).renderingMode(.template)
                             }
                         }
                     } preview: {
@@ -136,8 +133,8 @@ struct TodoListView: View {
                                 open: {}
                             )
                             .fixedSize(horizontal: false, vertical: true)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 12)
+                            .padding(.horizontal, Metrics.contextMenuPreviewH)
+                            .padding(.vertical, Metrics.contextMenuPreviewV)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(Color.clear)
                             ContextMenuPreviewLifecycle(
@@ -148,22 +145,18 @@ struct TodoListView: View {
                                     }
                                 }
                             )
-                            .frame(width: 0, height: 0)
+                            .frame(width: Metrics.zero, height: Metrics.zero)
                         }
-                        .frame(
-                            idealWidth: UIScreen.main.bounds.width * 0.9,
-                            maxWidth: UIScreen.main.bounds.width * 0.95,
-                            alignment: .leading
-                        )
+               .frame(idealWidth: UIScreen.main.bounds.width * Metrics.previewIdealWidthFactor,
+                   maxWidth: UIScreen.main.bounds.width * Metrics.previewMaxWidthFactor,
+                   alignment: .leading)
                         .background(Color.brandDarkGray)
                         .scrollDisabled(true)
                     }
 
                     // Custom divider (design-system color + spacing) except after last cell
                     if index < presenter.items.count - 1 {
-                        Rectangle()
-                            .fill(Color.dividerGray)
-                            .frame(height: 0.5)
+                        Rectangle().fill(Color.dividerGray).frame(height: Metrics.dividerHeight)
                             .padding(.top, LayoutPadding.cellGapVertical)
                         Spacer().frame(height: LayoutPadding.cellGapVertical)
                     }
@@ -201,18 +194,16 @@ struct TodoListView: View {
                 Text(presenter.taskCountLabel)
                     .font(AppFont.tinyMeta)
                     .foregroundStyle(.taskCountGray)
-                    .accessibilityIdentifier("task_count_label")
+                    .accessibilityIdentifier(A11yId.taskCountLabel)
                 HStack {
                     Spacer()
                     Button {
                         presenter.onAddTapped()
                     } label: {
-                        Image(systemName: "square.and.pencil").font(
+                        Image(systemName: Icons.add).font(
                             IconFont.action
                         ).foregroundStyle(.brandYellow)
-                    }.buttonStyle(.plain).accessibilityIdentifier(
-                        "add_task_button"
-                    )
+                    }.buttonStyle(.plain).accessibilityIdentifier(A11yId.addTaskButton)
                 }
             }
         }
@@ -226,38 +217,36 @@ private struct TaskRow: View {
     let toggle: () -> Void
     let open: () -> Void
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
+    HStack(alignment: .top, spacing: Metrics.taskRowInnerSpacing) {
             if !isActive {
-                Image(
-                    systemName: viewModel.isCompleted ? "checkmark.circle" : "circle"
-                )
+                Image(systemName: viewModel.isCompleted ? Icons.statusOn : Icons.statusOff)
                 .font(IconFont.status)
-                .foregroundStyle(viewModel.isCompleted ? .brandYellow : .secondary)
-                .frame(width: 24, height: 24, alignment: .top)
+                .foregroundStyle(viewModel.isCompleted ? .brandYellow : .brandLightGray)
+                .frame(width: Metrics.taskRowIconFrame, height: Metrics.taskRowIconFrame, alignment: .top)
                 .contentShape(Rectangle())
                 .onTapGesture(perform: toggle)
-                .accessibilityIdentifier("task_status_\(viewModel.id)")
+                .accessibilityIdentifier(A11yId.taskStatus(viewModel.id))
             }
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: Metrics.taskTextStackSpacing) {
                 Text(viewModel.title)
                     .font(AppFont.listItemTitle)
                     .fixedSize(horizontal: false, vertical: true)
-                    .foregroundStyle(viewModel.isCompleted ? .secondary : .primary)
+                    .foregroundStyle(viewModel.isCompleted ? .brandLightGray : .primary)
                     .strikethrough(
                         viewModel.isCompleted,
                         pattern: .solid,
-                        color: .secondary
+                        color: .brandLightGray
                     )
-                    .accessibilityIdentifier("task_title_\(viewModel.id)")
+                    .accessibilityIdentifier(A11yId.taskTitle(viewModel.id))
                 Text(viewModel.detail)
                     .font(AppFont.meta)
-                    .foregroundStyle(viewModel.isCompleted ? .secondary : .primary)
+                    .foregroundStyle(viewModel.isCompleted ? .brandLightGray : .primary)
                     .fixedSize(horizontal: false, vertical: true)
-                    .accessibilityIdentifier("task_detail_\(viewModel.id)")
+                    .accessibilityIdentifier(A11yId.taskDetail(viewModel.id))
                 Text(viewModel.createdDate)
                     .font(AppFont.meta)
                     .foregroundStyle(.brandLightGray)
-                    .accessibilityIdentifier("task_created_\(viewModel.id)")
+                    .accessibilityIdentifier(A11yId.taskCreated(viewModel.id))
             }
         }
         .contentShape(Rectangle())

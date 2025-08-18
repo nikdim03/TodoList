@@ -25,12 +25,12 @@ final class CoreDataTaskRepository: @unchecked Sendable, TaskRepository {
         try await ctx.perform {
             for dto in dtos {  // simplistic duplicate check
                 let fetch: NSFetchRequest<CDTask> = CDTask.fetchRequest()
-                fetch.predicate = NSPredicate(format: "id == %d", dto.id)
+                fetch.predicate = NSPredicate(format: FormatTemplates.predicateIdEquals, dto.id)
                 let exists = try ctx.count(for: fetch) > 0
                 if exists { continue }
                 let cdTask = CDTask(context: ctx)
                 cdTask.id = Int64(dto.id)
-                cdTask.title = "Task #\(dto.id)"
+                cdTask.title = FormatTemplates.russianTaskTitle(id: Int64(dto.id))
                 cdTask.detail = dto.todo
                 cdTask.createdAt = Date()
                 cdTask.completed = dto.completed
@@ -48,8 +48,7 @@ final class CoreDataTaskRepository: @unchecked Sendable, TaskRepository {
             if let query = search, !query.isEmpty {
                 predicates.append(
                     NSPredicate(
-                        format:
-                            "(title CONTAINS[cd] %@) OR (detail CONTAINS[cd] %@)",
+                        format: FormatTemplates.predicateTitleOrDetail,
                         query,
                         query
                     )
@@ -60,7 +59,7 @@ final class CoreDataTaskRepository: @unchecked Sendable, TaskRepository {
                 ? nil
                 : NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
             fetch.sortDescriptors = [
-                NSSortDescriptor(key: "createdAt", ascending: true)
+                NSSortDescriptor(key: CoreDataKeys.createdAt, ascending: true)
             ]
             let result = try ctx.fetch(fetch)
             return result.map { $0.toDomain() }
@@ -89,7 +88,7 @@ final class CoreDataTaskRepository: @unchecked Sendable, TaskRepository {
         let ctx = stack.backgroundContext
         try await ctx.perform {
             let fetch: NSFetchRequest<CDTask> = CDTask.fetchRequest()
-            fetch.predicate = NSPredicate(format: "id == %d", task.id)
+            fetch.predicate = NSPredicate(format: FormatTemplates.predicateIdEquals, task.id)
             guard let existing = try ctx.fetch(fetch).first else {
                 throw TaskError.notFound
             }
@@ -102,7 +101,7 @@ final class CoreDataTaskRepository: @unchecked Sendable, TaskRepository {
         let ctx = stack.backgroundContext
         try await ctx.perform {
             let fetch: NSFetchRequest<CDTask> = CDTask.fetchRequest()
-            fetch.predicate = NSPredicate(format: "id == %d", id)
+            fetch.predicate = NSPredicate(format: FormatTemplates.predicateIdEquals, id)
             if let existing = try ctx.fetch(fetch).first {
                 ctx.delete(existing)
                 try ctx.save()
@@ -114,7 +113,7 @@ final class CoreDataTaskRepository: @unchecked Sendable, TaskRepository {
         let ctx = stack.backgroundContext
         try await ctx.perform {
             let fetch: NSFetchRequest<CDTask> = CDTask.fetchRequest()
-            fetch.predicate = NSPredicate(format: "id == %d", id)
+            fetch.predicate = NSPredicate(format: FormatTemplates.predicateIdEquals, id)
             guard let existing = try ctx.fetch(fetch).first else {
                 throw TaskError.notFound
             }
@@ -140,7 +139,7 @@ extension CDTask {
     func toDomain() -> TodoItem {
         TodoItem(
             id: id,
-            title: title ?? "Task #\(id)",
+            title: title ?? FormatTemplates.russianTaskTitle(id: id),
             detail: detail ?? "",
             createdAt: createdAt ?? Date(),
             status: completed ? .completed : .pending

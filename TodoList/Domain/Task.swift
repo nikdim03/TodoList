@@ -20,7 +20,7 @@ public struct TodoItem: Identifiable, Equatable, Sendable {
             !title.isEmpty {
             self.title = title
         } else {
-            self.title = "Task #\(id)"
+            self.title = "Задача #\(id)"
         }
         self.detail = detail
         self.createdAt = createdAt

@@ -11,6 +11,11 @@ struct TodoDetailDraft: Equatable {
         detail = item?.detail ?? ""
         isCompleted = item?.status == .completed
     }
+    init(title: String, detail: String, isCompleted: Bool) {
+        self.title = title
+        self.detail = detail
+        self.isCompleted = isCompleted
+    }
     func applying(to original: TodoItem?) -> TodoItem? {
         guard var original else { return nil }
         original.title = title.trimmingCharacters(in: .whitespacesAndNewlines)

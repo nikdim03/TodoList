@@ -8,14 +8,23 @@ final class CoreDataStack {
     var viewContext: NSManagedObjectContext { container.viewContext }
 
     init(inMemory: Bool = false) {
-        container = NSPersistentContainer(name: "TodoList")
+        container = NSPersistentContainer(
+            name: FormatTemplates.persistentStoreName
+        )
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(
-                fileURLWithPath: "/dev/null"
+                fileURLWithPath: FormatTemplates.devNullPath
             )
         }
         container.loadPersistentStores { _, error in
-            if let error { fatalError("Unresolved Core Data error: \(error)") }
+            if let error {
+                fatalError(
+                    String(
+                        format: FormatTemplates.coreDataUnresolvedError,
+                        String(describing: error)
+                    )
+                )
+            }
         }
         container.viewContext.mergePolicy =
             NSMergeByPropertyObjectTrumpMergePolicy

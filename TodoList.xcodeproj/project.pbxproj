@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXContainerItemProxy section */
@@ -29,22 +29,20 @@
 		4616C65C2E52159E0046F269 /* TodoListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TodoListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		466798432E538A9300C4D1AF /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 4616C63F2E52159C0046F269 /* TodoList */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		4616C6422E52159C0046F269 /* TodoList */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TodoList;
-			sourceTree = "<group>";
-		};
-		4616C6552E52159E0046F269 /* TodoListTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TodoListTests;
-			sourceTree = "<group>";
-		};
-		4616C65F2E52159E0046F269 /* TodoListUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TodoListUITests;
-			sourceTree = "<group>";
-		};
+		4616C6422E52159C0046F269 /* TodoList */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (466798432E538A9300C4D1AF /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = TodoList; sourceTree = "<group>"; };
+		4616C6552E52159E0046F269 /* TodoListTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TodoListTests; sourceTree = "<group>"; };
+		4616C65F2E52159E0046F269 /* TodoListUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TodoListUITests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,18 +186,18 @@
 				};
 			};
 			buildConfigurationList = 4616C63B2E52159C0046F269 /* Build configuration list for PBXProject "TodoList" */;
-			developmentRegion = en;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = ru;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				ru,
 			);
 			mainGroup = 4616C6372E52159C0046F269;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				46F1CBD62E535E2400C493F5 /* XCRemoteSwiftPackageReference "SwiftLint" */,
 			);
-			preferredProjectObjectVersion = 77;
 			productRefGroup = 4616C6412E52159C0046F269 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -408,13 +406,15 @@
 				DEVELOPMENT_TEAM = J25YA2CZDR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TodoList/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Нужен доступ к микрофону для голосового ввода поиска";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Приложению нужен доступ к распознаванию речи для диктовки текста поиска";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -438,13 +438,15 @@
 				DEVELOPMENT_TEAM = J25YA2CZDR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TodoList/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Нужен доступ к микрофону для голосового ввода поиска";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Приложению нужен доступ к распознаванию речи для диктовки текста поиска";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

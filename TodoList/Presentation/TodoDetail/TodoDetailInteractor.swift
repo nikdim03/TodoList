@@ -26,7 +26,12 @@ final class TodoDetailInteractor: TodoDetailInteractorInterface {
                 try? await update.execute(task: updated)
             }
         } else if original == nil {  // create new
-            _ = try? await add.execute(detail: draft.detail, title: draft.title)
+            let trimmedTitle = draft.title.trimmingCharacters(in: .whitespacesAndNewlines)
+            let trimmedDetail = draft.detail.trimmingCharacters(in: .whitespacesAndNewlines)
+            // Only create if user provided either a title or a detail
+            guard !trimmedTitle.isEmpty || !trimmedDetail.isEmpty else { return }
+            let titleOrNil = trimmedTitle.isEmpty ? nil : trimmedTitle
+            _ = try? await add.execute(detail: trimmedDetail, title: titleOrNil)
         }
     }
 }

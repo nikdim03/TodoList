@@ -13,7 +13,8 @@ final class SystemSpeechRecognizer: NSObject, ObservableObject,
     private let localeIdentifier: String
 
     override init() {
-        localeIdentifier = Locale.preferredLanguages.first ?? "ru-RU"
+        localeIdentifier =
+            Locale.preferredLanguages.first ?? Locale.ruRU.identifier
         recognizer = SFSpeechRecognizer(
             locale: Locale(identifier: localeIdentifier)
         )
@@ -85,7 +86,11 @@ final class SystemSpeechRecognizer: NSObject, ObservableObject,
 
         let input = audioEngine.inputNode
         let format = input.outputFormat(forBus: 0)
-        input.installTap(onBus: 0, bufferSize: 1024, format: format) { [weak self] buffer, _ in
+        input.installTap(
+            onBus: 0,
+            bufferSize: AudioConstants.inputBufferSize,
+            format: format
+        ) { [weak self] buffer, _ in
             self?.recognitionRequest?.append(buffer)
         }
         audioEngine.prepare()

@@ -28,7 +28,7 @@ struct AppFont {
 
 // MARK: - Icon Font Tokens
 struct IconFont {
-    static var status: Font { .system(size: 24, weight: .regular) }  // circle / checkmark
+    static var status: Font { .system(size: 24, weight: .thin) }  // circle / checkmark
     static var action: Font { .system(size: 22, weight: .regular) }  // add / edit (toolbar)
     static var mic: Font { .system(size: 22, weight: .regular) }  // mic icon
 }

@@ -27,9 +27,3 @@ final class TodoListRouter: ObservableObject, TodoListRouterInterface {
 }
 
 enum TodoListRoute: Hashable { case detail(Int64?) }
-
-// Expose a controlled accessor to original entity (keeps conversion logic in Presenter)
-// No presenter extensions – presenter now exposes entity(for:) directly.
-// extension TodoListPresenter {
-//     fileprivate func entity(for id: Int64) -> TodoItem? { allTasks.first { $0.id == id } }
-// }

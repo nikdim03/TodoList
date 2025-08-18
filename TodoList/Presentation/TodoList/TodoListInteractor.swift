@@ -46,7 +46,7 @@ final class TodoListInteractor: TodoListInteractorInterface {
             await MainActor.run { output?.didChange(tasks: tasks) }
         } catch {
             // In a more robust app we would propagate error for Presenter to convert to UI state.
-            Logger.logError("Fetch tasks failed: \(error)")
+            Logger.logError(String(format: FormatTemplates.fetchTasksFailed, String(describing: error)))
         }
         await MainActor.run { output?.didChangeLoading(false) }
     }
@@ -65,5 +65,3 @@ final class TodoListInteractor: TodoListInteractorInterface {
         }
     }
 }
-
-// (No additional bridging needed.)

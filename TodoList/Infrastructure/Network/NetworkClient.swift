@@ -6,9 +6,9 @@ final class NetworkClient: RemoteBootstrapService {
     init(session: URLSession = .shared) { self.session = session }
 
     func fetchTodos() async throws -> [RemoteTodoDTO] {
-        let url = URL(string: "https://dummyjson.com/todos")!
+    guard let url = URL(string: FormatTemplates.remoteTodosURLString) else { throw TaskError.network }
         let (data, response) = try await session.data(from: url)
-        guard (response as? HTTPURLResponse)?.statusCode == 200 else {
+    guard (response as? HTTPURLResponse)?.statusCode == FormatTemplates.httpStatusOK else {
             throw TaskError.network
         }
         struct Wrapper: Decodable { let todos: [RemoteTodoDTO] }

@@ -41,15 +41,7 @@ final class TodoDetailPresenter: ObservableObject, TodoDetailPresenterInterface,
     }
 
     private func currentDraft() -> TodoDetailDraft {
-        TodoDetailDraft(
-            item: TodoItem(
-                id: original?.id ?? -1,
-                title: title,
-                detail: detail,
-                createdAt: original?.createdAt ?? Date(),
-                status: isCompleted ? .completed : .pending
-            )
-        )
+        TodoDetailDraft(title: title, detail: detail, isCompleted: isCompleted)
     }
     private func apply(_ draft: TodoDetailDraft) {
         title = draft.title

@@ -7,9 +7,9 @@ struct TodoDetailView: View {
     }
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: LayoutMetrics.vStackDetailSpacing) {
                 TextField(
-                    "Title",
+                    Strings.detailTitlePlaceholder,
                     text: Binding(
                         get: { presenter.title },
                         set: { presenter.onTitleChanged($0) }
@@ -17,24 +17,24 @@ struct TodoDetailView: View {
                 )
                 .font(AppFont.largeTitle)
                 .textFieldStyle(.plain)
-                .accessibilityIdentifier("detail_title_field")
-                .padding(.top, 12)
+                .accessibilityIdentifier(A11yId.detailTitleField)
+                .padding(.top, LayoutMetrics.detailTopPadding)
                 Text(
-                    presenter.createdAt,
-                    format: Date.FormatStyle().day().month(.twoDigits).year(
-                        .twoDigits
+                    presenter.createdAt.formatted(
+                        Date.FormatStyle().day().month(.twoDigits).year(.twoDigits).locale(Locale.enUSPOSIX)
                     )
                 )
                 .font(AppFont.meta)
                 .foregroundColor(.brandLightGray)
-                .accessibilityIdentifier("detail_created_date_label")
+                .accessibilityIdentifier(A11yId.detailCreatedDateLabel)
                 ZStack(alignment: .topLeading) {
                     if presenter.detail.trimmingCharacters(
                         in: .whitespacesAndNewlines
                     ).isEmpty {
-                        Text("Notes...").font(AppFont.description)
-                            .foregroundColor(.secondary).padding(.horizontal, 4)
-                            .padding(.vertical, 8)
+                        Text(Strings.detailNotesPlaceholder).font(AppFont.description)
+                            .foregroundColor(.brandLightGray)
+                            .padding(.horizontal, Metrics.detailNotesPlaceholderHorizontal)
+                            .padding(.vertical, Metrics.detailNotesPlaceholderVertical)
                     }
                     TextEditor(
                         text: Binding(
@@ -43,13 +43,13 @@ struct TodoDetailView: View {
                         )
                     )
                     .font(AppFont.description)
-                    .frame(minHeight: 160)
-                    .accessibilityIdentifier("detail_description_editor")
-                    .padding(.horizontal, 0)
+                    .frame(minHeight: Metrics.detailNotesMinHeight)
+                    .accessibilityIdentifier(A11yId.detailDescriptionEditor)
+                    .padding(.horizontal, Metrics.zero)
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.bottom, 40)
+            .padding(.horizontal, Metrics.detailHorizontalPadding)
+            .padding(.bottom, LayoutMetrics.detailBottomPadding)
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
@@ -63,14 +63,14 @@ struct TodoDetailView: View {
             Button(
                 action: { presenter.onClose() },
                 label: {
-                    HStack(spacing: 4) {
-                        Image(systemName: "chevron.backward")
-                        Text("Назад").font(AppFont.backButton)
+                    HStack(spacing: LayoutMetrics.backButtonSpacing) {
+                        Image(systemName: Icons.backChevron)
+                        Text(Strings.detailBack).font(AppFont.backButton)
                     }
                 }
             )
             .tint(.brandYellow)
-            .accessibilityIdentifier("detail_back_button")
+            .accessibilityIdentifier(A11yId.detailBackButton)
         }
     }
 }

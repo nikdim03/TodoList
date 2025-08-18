@@ -8,7 +8,7 @@ final class TodoListPresenter: ObservableObject, TodoListPresenterInterface,
     @Published private(set) var items: [TodoListItemViewModel] = []
     @Published private(set) var isLoading: Bool = false
     @Published private(set) var isRefreshing: Bool = false
-    @Published private(set) var taskCountLabel: String = "0 Задач"  // localized plural label
+    @Published private(set) var taskCountLabel: String = Strings.taskCountLabel(0)  // localized plural label
 
     private let interactor: TodoListInteractorInterface
     private let router: TodoListRouterInterface
@@ -40,7 +40,7 @@ final class TodoListPresenter: ObservableObject, TodoListPresenterInterface,
         searchDebounceTask?.cancel()
         let query = text.trimmingCharacters(in: .whitespacesAndNewlines)
         searchDebounceTask = Task { [weak self] in
-            try? await Task.sleep(nanoseconds: 300_000_000)
+            try? await Task.sleep(nanoseconds: Timings.searchDebounceMs * 1_000_000)
             guard !Task.isCancelled else { return }
             await MainActor.run {
                 self?.interactor.fetch(search: query.isEmpty ? nil : query)
@@ -78,9 +78,9 @@ final class TodoListPresenter: ObservableObject, TodoListPresenterInterface,
         isRefreshing = true
         await interactor.refetch()
         let elapsed = Date().timeIntervalSince(start)
-        if elapsed < 0.4 {
+    if elapsed < Timings.minRefreshDuration {
             try? await Task.sleep(
-                nanoseconds: UInt64((0.4 - elapsed) * 1_000_000_000)
+        nanoseconds: UInt64((Timings.minRefreshDuration - elapsed) * 1_000_000_000)
             )
         }
         isRefreshing = false
@@ -95,12 +95,12 @@ final class TodoListPresenter: ObservableObject, TodoListPresenterInterface,
                 title: task.title,
                 detail: task.detail,
                 createdDate: task.createdAt.formatted(
-                    Date.FormatStyle().day().month(.twoDigits).year(.twoDigits)
+                    Date.FormatStyle().day().month(.twoDigits).year(.twoDigits).locale(Locale.enUSPOSIX)
                 ),
                 isCompleted: task.status == .completed
             )
         }
-        taskCountLabel = makeCountLabel(tasks.count)
+    taskCountLabel = Strings.taskCountLabel(tasks.count)
     }
 
     func didChangeLoading(_ isLoading: Bool) { self.isLoading = isLoading }
@@ -109,30 +109,19 @@ final class TodoListPresenter: ObservableObject, TodoListPresenterInterface,
     func entity(for id: Int64) -> TodoItem? { allTasks.first { $0.id == id } }
 
     // MARK: - Formatting Helpers (UI-specific presentation logic)
-    private func makeCountLabel(_ count: Int) -> String {
-        let word: String = {
-            let rem100 = count % 100
-            if rem100 >= 11 && rem100 <= 14 { return "Задач" }
-            switch count % 10 {
-            case 1: return "Задача"
-            case 2, 3, 4: return "Задачи"
-            default: return "Задач"
-            }
-        }()
-        return "\(count) \(word)"
-    }
+    // Removed: pluralization logic centralized in S.taskCountLabel
 
     func shareText(for id: Int64) -> String {
         guard let task = entity(for: id) else { return "" }
         let dateStr = task.createdAt.formatted(
-            Date.FormatStyle().day().month(.twoDigits).year(.twoDigits)
+            Date.FormatStyle().day().month(.twoDigits).year(.twoDigits).locale(Locale.enUSPOSIX)
         )
-        let status = task.status == .completed ? "✅ Completed" : "⭕ Pending"
+    let status = Strings.shareStatus(task.status)
         var lines: [String] = []
         lines.append("")
-        lines.append("Название: \(task.title)")
-        lines.append("Дата: \(dateStr)")
-        lines.append("Статус: \(status)")
+    lines.append(Strings.shareLineTitle(task.title))
+    lines.append(Strings.shareLineDate(dateStr))
+    lines.append(Strings.shareLineStatus(status))
         if !task.detail.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             lines.append("\n\(task.detail)")
         }
