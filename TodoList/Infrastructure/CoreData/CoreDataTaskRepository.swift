@@ -17,7 +17,15 @@ final class CoreDataTaskRepository: @unchecked Sendable, TaskRepository {
             let remoteTodos = try await remote.fetchTodos()
             try await persistRemote(remoteTodos)
             appConfig.didBootstrap = true
-        } catch { throw TaskError.network }
+        } catch {
+            // Fallback: on first launch only, try bundled JSON instead of failing network bootstrap
+            if let local = try? loadBundledTodos() {
+                try await persistRemote(local)
+                appConfig.didBootstrap = true
+            } else {
+                throw TaskError.network
+            }
+        }
     }
 
     private func persistRemote(_ dtos: [RemoteTodoDTO]) async throws {
@@ -134,6 +142,25 @@ final class CoreDataTaskRepository: @unchecked Sendable, TaskRepository {
             existing.completed.toggle()
             try ctx.save()
         }
+    }
+}
+
+// MARK: - Local Fallback
+extension CoreDataTaskRepository {
+    fileprivate func loadBundledTodos() throws -> [RemoteTodoDTO] {
+        guard
+            let url = Bundle.main.url(
+                forResource: "todos",
+                withExtension: "json"
+            )
+        else {
+            throw TaskError.decode
+        }
+        struct Wrapper: Decodable { let todos: [RemoteTodoDTO] }
+        do {
+            let data = try Data(contentsOf: url)
+            return try JSONDecoder().decode(Wrapper.self, from: data).todos
+        } catch { throw TaskError.decode }
     }
 }
 
