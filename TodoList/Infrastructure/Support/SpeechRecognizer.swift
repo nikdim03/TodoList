@@ -78,10 +78,15 @@ final class SystemSpeechRecognizer: NSObject, ObservableObject,
             guard let self else { return }
             if let result = result {
                 let text = result.bestTranscription.formattedString
-                self.transcript = text
-                onUpdate(text)
+                // Marshal UI-observable state changes to the main queue to avoid publishing from background threads.
+                DispatchQueue.main.async {
+                    self.transcript = text
+                    onUpdate(text)
+                }
             }
-            if error != nil || (result?.isFinal ?? false) { self.stop() }
+            if error != nil || (result?.isFinal ?? false) {
+                DispatchQueue.main.async { self.stop() }
+            }
         }
 
         let input = audioEngine.inputNode

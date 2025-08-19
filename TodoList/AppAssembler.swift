@@ -36,7 +36,10 @@ final class AppAssembler: ObservableObject {
         let presenter = TodoListPresenter(
             interactor: interactor,
             router: router,
-            speech: SystemSpeechRecognizer()
+            // Disable speech recognizer during UI tests to avoid system permission alerts blocking the flow.
+            speech: ProcessInfo.processInfo.arguments.contains(
+                "UITEST_DISABLE_SPEECH"
+            ) ? nil : SystemSpeechRecognizer()
         )
         interactor.attach(output: presenter)
         return TodoListView(presenter: presenter, router: router)

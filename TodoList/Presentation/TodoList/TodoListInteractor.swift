@@ -37,7 +37,27 @@ final class TodoListInteractor: TodoListInteractorInterface {
         Task { await fetchInternal() }
     }
 
-    func refetch() async { await fetchInternal() }
+    // Force a fresh remote fetch (network) when user performs pull-to-refresh.
+    // We intentionally reset bootstrap flag so LoadInitial use case re-downloads remote todos.
+    // Loading state is emitted once covering both remote + local fetch.
+    func refetch() async {
+        await MainActor.run { output?.didChangeLoading(true) }
+        // Reset bootstrap so remote fetch executes again
+        AppConfig.shared.didBootstrap = false
+        do {
+            try? await loadInitial.execute()  // remote fetch & persist
+            let tasks = try await getTasks.execute(search: currentSearch)
+            await MainActor.run { output?.didChange(tasks: tasks) }
+        } catch {
+            Logger.logError(
+                String(
+                    format: FormatTemplates.fetchTasksFailed,
+                    String(describing: error)
+                )
+            )
+        }
+        await MainActor.run { output?.didChangeLoading(false) }
+    }
 
     private func fetchInternal() async {
         await MainActor.run { output?.didChangeLoading(true) }
@@ -46,7 +66,12 @@ final class TodoListInteractor: TodoListInteractorInterface {
             await MainActor.run { output?.didChange(tasks: tasks) }
         } catch {
             // In a more robust app we would propagate error for Presenter to convert to UI state.
-            Logger.logError(String(format: FormatTemplates.fetchTasksFailed, String(describing: error)))
+            Logger.logError(
+                String(
+                    format: FormatTemplates.fetchTasksFailed,
+                    String(describing: error)
+                )
+            )
         }
         await MainActor.run { output?.didChangeLoading(false) }
     }

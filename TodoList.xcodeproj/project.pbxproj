@@ -27,6 +27,7 @@
 		4616C6402E52159C0046F269 /* TodoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4616C6522E52159E0046F269 /* TodoListTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TodoListTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4616C65C2E52159E0046F269 /* TodoListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TodoListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		462231742E54A39300D5342E /* TodoList.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TodoList.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -73,6 +74,7 @@
 		4616C6372E52159C0046F269 = {
 			isa = PBXGroup;
 			children = (
+				462231742E54A39300D5342E /* TodoList.xctestplan */,
 				4616C6422E52159C0046F269 /* TodoList */,
 				4616C6552E52159E0046F269 /* TodoListTests */,
 				4616C65F2E52159E0046F269 /* TodoListUITests */,
@@ -104,7 +106,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				46F1CBD82E535E3600C493F5 /* PBXTargetDependency */,
+				46311D602E54DDCF0009D88E /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				4616C6422E52159C0046F269 /* TodoList */,
@@ -196,7 +198,7 @@
 			mainGroup = 4616C6372E52159C0046F269;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				46F1CBD62E535E2400C493F5 /* XCRemoteSwiftPackageReference "SwiftLint" */,
+				46311D5E2E54DDC50009D88E /* XCRemoteSwiftPackageReference "SwiftLint" */,
 			);
 			productRefGroup = 4616C6412E52159C0046F269 /* Products */;
 			projectDirPath = "";
@@ -268,9 +270,9 @@
 			target = 4616C63F2E52159C0046F269 /* TodoList */;
 			targetProxy = 4616C65D2E52159E0046F269 /* PBXContainerItemProxy */;
 		};
-		46F1CBD82E535E3600C493F5 /* PBXTargetDependency */ = {
+		46311D602E54DDCF0009D88E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = 46F1CBD72E535E3600C493F5 /* SwiftLintBuildToolPlugin */;
+			productRef = 46311D5F2E54DDCF0009D88E /* SwiftLintBuildToolPlugin */;
 		};
 /* End PBXTargetDependency section */
 
@@ -574,7 +576,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		46F1CBD62E535E2400C493F5 /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
+		46311D5E2E54DDC50009D88E /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/SwiftLint";
 			requirement = {
@@ -585,9 +587,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		46F1CBD72E535E3600C493F5 /* SwiftLintBuildToolPlugin */ = {
+		46311D5F2E54DDCF0009D88E /* SwiftLintBuildToolPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 46F1CBD62E535E2400C493F5 /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			package = 46311D5E2E54DDC50009D88E /* XCRemoteSwiftPackageReference "SwiftLint" */;
 			productName = "plugin:SwiftLintBuildToolPlugin";
 		};
 /* End XCSwiftPackageProductDependency section */

@@ -34,7 +34,8 @@ final class TodoDetailPresenter: ObservableObject, TodoDetailPresenterInterface,
     func onClose() {
         guard !closing else { return }
         closing = true
-        Task {
+        Task { @MainActor in
+            // Persist can perform background work; we hop back to MainActor for dismissal.
             await persistIfDirty()
             router.dismiss()
         }

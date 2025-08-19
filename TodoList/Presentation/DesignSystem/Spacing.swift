@@ -4,14 +4,14 @@ import SwiftUI
 // Centralized layout metrics to eliminate magic numbers in paddings & spacers.
 struct AppSpacing {
     // Base scale (you can adjust the base numbers later if design shifts)
-    static let xxs: CGFloat = 4 // swiftlint:disable:this identifier_name
-    static let xs: CGFloat = 6 // swiftlint:disable:this identifier_name
-    static let sm: CGFloat = 8 // swiftlint:disable:this identifier_name
-    static let md: CGFloat = 12 // swiftlint:disable:this identifier_name
-    static let lg: CGFloat = 16 // swiftlint:disable:this identifier_name
-    static let xl: CGFloat = 20 // swiftlint:disable:this identifier_name
-    static let xxl: CGFloat = 24 // swiftlint:disable:this identifier_name
-    static let xxxl: CGFloat = 40 // swiftlint:disable:this identifier_name
+    static let xxs: CGFloat = 4  // swiftlint:disable:this identifier_name
+    static let xs: CGFloat = 6  // swiftlint:disable:this identifier_name
+    static let sm: CGFloat = 8  // swiftlint:disable:this identifier_name
+    static let md: CGFloat = 12  // swiftlint:disable:this identifier_name
+    static let lg: CGFloat = 16  // swiftlint:disable:this identifier_name
+    static let xl: CGFloat = 20  // swiftlint:disable:this identifier_name
+    static let xxl: CGFloat = 24  // swiftlint:disable:this identifier_name
+    static let xxxl: CGFloat = 40  // swiftlint:disable:this identifier_name
 }
 
 struct LayoutPadding {

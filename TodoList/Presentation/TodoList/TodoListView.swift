@@ -15,10 +15,15 @@ struct TodoListView: View {
 
     var body: some View {
         NavigationStack(path: $router.path) {
-            VStack(spacing: 0) {
-                searchBar
-                Spacer().frame(height: Metrics.listTopSpacer)
-                listContent
+            ZStack {
+                VStack(spacing: 0) {
+                    searchBar
+                    Spacer().frame(height: Metrics.listTopSpacer)
+                    listContent
+                }
+                if presenter.isLoading && !presenter.isRefreshing {
+                    loadingOverlay
+                }
             }
             .navigationTitle(Strings.navTasksTitle)
             .navigationBarTitleDisplayMode(.large)
@@ -40,9 +45,10 @@ struct TodoListView: View {
             )
             ZStack(alignment: .leading) {
                 if search.isEmpty {
-                    Text(Strings.searchPlaceholder).font(AppFont.search).foregroundColor(
-                        .brandLightGray
-                    )
+                    Text(Strings.searchPlaceholder).font(AppFont.search)
+                        .foregroundColor(
+                            .brandLightGray
+                        )
                 }
                 TextField("", text: $search)
                     .font(AppFont.search)
@@ -50,6 +56,7 @@ struct TodoListView: View {
                     .onChange(of: search) { _, newValue in
                         presenter.onSearch(newValue)
                     }
+                    .accessibilityIdentifier(A11yId.searchField)
             }
             if !search.isEmpty {
                 Button {
@@ -65,9 +72,15 @@ struct TodoListView: View {
             Button {
                 presenter.onMicTapped()
             } label: {
-                Image(systemName: presenter.isDictating ? Icons.micStop : Icons.mic)
+                Image(
+                    systemName: presenter.isDictating
+                        ? Icons.micStop : Icons.mic
+                )
                 .font(IconFont.mic)
-                .frame(width: Metrics.searchMicFrame, height: Metrics.searchMicFrame)
+                .frame(
+                    width: Metrics.searchMicFrame,
+                    height: Metrics.searchMicFrame
+                )
                 .foregroundStyle(.brandLightGray)
                 .contentShape(Rectangle())
             }
@@ -76,9 +89,27 @@ struct TodoListView: View {
         .padding(.horizontal, Metrics.searchBarHorizontalPad)
         .padding(.vertical, Metrics.searchBarVerticalPad)
         .background(
-            RoundedRectangle(cornerRadius: Metrics.searchBarCornerRadius).fill(Color.brandDarkGray)
+            RoundedRectangle(cornerRadius: Metrics.searchBarCornerRadius).fill(
+                Color.brandDarkGray
+            )
         )
         .padding(.horizontal, LayoutPadding.screenHorizontal)
+    }
+
+    private var loadingOverlay: some View {
+        ZStack {
+            Color.black.opacity(Metrics.loadingOverlayOpacity).ignoresSafeArea()
+            ProgressView()
+                .progressViewStyle(.circular)
+                .tint(.brandYellow)
+                .scaleEffect(Metrics.loadingOverlayScale)
+                .accessibilityIdentifier(A11yId.loadingIndicator)
+        }
+        .transition(.opacity)
+        .animation(
+            .easeInOut(duration: Timings.loadingAnimation),
+            value: presenter.isLoading
+        )
     }
 
     private var listContent: some View {
@@ -86,12 +117,18 @@ struct TodoListView: View {
             ForEach(presenter.items.indices, id: \.self) { index in
                 let viewModel = presenter.items[index]
                 VStack(spacing: 0) {
-                    TaskRow(viewModel: viewModel, isActive: activeContextMenuTaskId == viewModel.id) {
+                    TaskRow(
+                        viewModel: viewModel,
+                        isActive: activeContextMenuTaskId == viewModel.id
+                    ) {
                         presenter.onToggle(id: viewModel.id)
                     } open: {
                         presenter.onSelect(id: viewModel.id)
                     }
-                    .blur(radius: activeContextMenuTaskId != nil ? Metrics.blurRadiusActiveContextMenu : 0)
+                    .blur(
+                        radius: activeContextMenuTaskId != nil
+                            ? Metrics.blurRadiusActiveContextMenu : 0
+                    )
                     .id(viewModel.id)
                     .contentShape(Rectangle())
                     .onTapGesture { presenter.onSelect(id: viewModel.id) }
@@ -138,7 +175,9 @@ struct TodoListView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(Color.clear)
                             ContextMenuPreviewLifecycle(
-                                onOpen: { activeContextMenuTaskId = viewModel.id },
+                                onOpen: {
+                                    activeContextMenuTaskId = viewModel.id
+                                },
                                 onClose: {
                                     if activeContextMenuTaskId == viewModel.id {
                                         activeContextMenuTaskId = nil
@@ -147,17 +186,23 @@ struct TodoListView: View {
                             )
                             .frame(width: Metrics.zero, height: Metrics.zero)
                         }
-               .frame(idealWidth: UIScreen.main.bounds.width * Metrics.previewIdealWidthFactor,
-                   maxWidth: UIScreen.main.bounds.width * Metrics.previewMaxWidthFactor,
-                   alignment: .leading)
+                        .frame(
+                            idealWidth: UIScreen.main.bounds.width
+                                * Metrics.previewIdealWidthFactor,
+                            maxWidth: UIScreen.main.bounds.width
+                                * Metrics.previewMaxWidthFactor,
+                            alignment: .leading
+                        )
                         .background(Color.brandDarkGray)
                         .scrollDisabled(true)
                     }
 
                     // Custom divider (design-system color + spacing) except after last cell
                     if index < presenter.items.count - 1 {
-                        Rectangle().fill(Color.dividerGray).frame(height: Metrics.dividerHeight)
-                            .padding(.top, LayoutPadding.cellGapVertical)
+                        Rectangle().fill(Color.dividerGray).frame(
+                            height: Metrics.dividerHeight
+                        )
+                        .padding(.top, LayoutPadding.cellGapVertical)
                         Spacer().frame(height: LayoutPadding.cellGapVertical)
                     }
                 }
@@ -175,6 +220,7 @@ struct TodoListView: View {
                 }
             }
         }
+        .accessibilityIdentifier(A11yId.todoList)
         .refreshable { await presenter.refresh() }
         .scrollContentBackground(.hidden)
         .listStyle(.plain)
@@ -203,7 +249,9 @@ struct TodoListView: View {
                         Image(systemName: Icons.add).font(
                             IconFont.action
                         ).foregroundStyle(.brandYellow)
-                    }.buttonStyle(.plain).accessibilityIdentifier(A11yId.addTaskButton)
+                    }.buttonStyle(.plain).accessibilityIdentifier(
+                        A11yId.addTaskButton
+                    )
                 }
             }
         }
@@ -217,12 +265,21 @@ private struct TaskRow: View {
     let toggle: () -> Void
     let open: () -> Void
     var body: some View {
-    HStack(alignment: .top, spacing: Metrics.taskRowInnerSpacing) {
+        HStack(alignment: .top, spacing: Metrics.taskRowInnerSpacing) {
             if !isActive {
-                Image(systemName: viewModel.isCompleted ? Icons.statusOn : Icons.statusOff)
+                Image(
+                    systemName: viewModel.isCompleted
+                        ? Icons.statusOn : Icons.statusOff
+                )
                 .font(IconFont.status)
-                .foregroundStyle(viewModel.isCompleted ? .brandYellow : .brandLightGray)
-                .frame(width: Metrics.taskRowIconFrame, height: Metrics.taskRowIconFrame, alignment: .top)
+                .foregroundStyle(
+                    viewModel.isCompleted ? .brandYellow : .brandLightGray
+                )
+                .frame(
+                    width: Metrics.taskRowIconFrame,
+                    height: Metrics.taskRowIconFrame,
+                    alignment: .top
+                )
                 .contentShape(Rectangle())
                 .onTapGesture(perform: toggle)
                 .accessibilityIdentifier(A11yId.taskStatus(viewModel.id))
@@ -231,7 +288,9 @@ private struct TaskRow: View {
                 Text(viewModel.title)
                     .font(AppFont.listItemTitle)
                     .fixedSize(horizontal: false, vertical: true)
-                    .foregroundStyle(viewModel.isCompleted ? .brandLightGray : .primary)
+                    .foregroundStyle(
+                        viewModel.isCompleted ? .brandLightGray : .primary
+                    )
                     .strikethrough(
                         viewModel.isCompleted,
                         pattern: .solid,
@@ -240,7 +299,9 @@ private struct TaskRow: View {
                     .accessibilityIdentifier(A11yId.taskTitle(viewModel.id))
                 Text(viewModel.detail)
                     .font(AppFont.meta)
-                    .foregroundStyle(viewModel.isCompleted ? .brandLightGray : .primary)
+                    .foregroundStyle(
+                        viewModel.isCompleted ? .brandLightGray : .primary
+                    )
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityIdentifier(A11yId.taskDetail(viewModel.id))
                 Text(viewModel.createdDate)

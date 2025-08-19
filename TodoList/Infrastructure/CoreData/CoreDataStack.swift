@@ -31,5 +31,7 @@ final class CoreDataStack {
         container.viewContext.automaticallyMergesChangesFromParent = true
         backgroundContext = container.newBackgroundContext()
         backgroundContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        // Ensure background saves merge automatically into viewContext to keep UI in sync without manual fetches.
+        backgroundContext.automaticallyMergesChangesFromParent = true
     }
 }

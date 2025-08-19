@@ -3,9 +3,9 @@ import Foundation
 // Reusable string templates & non-localized format helpers shared across layers.
 public enum FormatTemplates {
     public static func russianTaskTitle(id: Int64) -> String { "Задача #\(id)" }
-    public static func englishTaskTitle(id: Int64) -> String { "Task #\(id)" }
     public static let coreDataUnresolvedError = "Unresolved Core Data error: %@"
-    public static let predicateTitleOrDetail = "(title CONTAINS[cd] %@) OR (detail CONTAINS[cd] %@)"
+    public static let predicateTitleOrDetail =
+        "(title CONTAINS[cd] %@) OR (detail CONTAINS[cd] %@)"
     public static let bootstrapFlagKey = "didBootstrap"
     public static let persistentStoreName = "TodoList"
     public static let remoteTodosURLString = "https://dummyjson.com/todos"

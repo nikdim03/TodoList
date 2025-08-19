@@ -1,0 +1,46 @@
+{
+  "configurations" : [
+    {
+      "id" : "AA9DD3D9-CD78-4D1D-87F3-7207DFFCADA0",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "commandLineArgumentEntries" : [
+
+    ],
+    "defaultTestExecutionTimeAllowance" : 60,
+    "environmentVariableEntries" : [
+
+    ],
+    "maximumTestExecutionTimeAllowance" : 60,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:TodoList.xcodeproj",
+      "identifier" : "4616C63F2E52159C0046F269",
+      "name" : "TodoList"
+    },
+    "threadSanitizerEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:TodoList.xcodeproj",
+        "identifier" : "4616C6512E52159E0046F269",
+        "name" : "TodoListTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:TodoList.xcodeproj",
+        "identifier" : "4616C65B2E52159E0046F269",
+        "name" : "TodoListUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

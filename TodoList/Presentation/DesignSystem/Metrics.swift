@@ -22,4 +22,7 @@ public enum Metrics {
     public static let detailNotesMinHeight: CGFloat = 160
     public static let detailHorizontalPadding: CGFloat = 16
     public static let zero: CGFloat = 0
+    // Loading overlay
+    public static let loadingOverlayOpacity: CGFloat = 0.7
+    public static let loadingOverlayScale: CGFloat = 1.4
 }

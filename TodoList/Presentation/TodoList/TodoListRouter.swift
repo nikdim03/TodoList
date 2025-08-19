@@ -18,8 +18,10 @@ final class TodoListRouter: ObservableObject, TodoListRouterInterface {
         case .detail(let id):
             let todo = id.flatMap { presenter.entity(for: $0) }
             if let assembler {
-                assembler.makeTodoDetailModule(item: todo) { [weak self] in
+                assembler.makeTodoDetailModule(item: todo) { [weak self, weak presenter] in
                     self?.path.removeLast()
+                    // Trigger a refetch so newly created/updated tasks appear immediately on return.
+                    Task { await presenter?.refresh() }
                 }
             }
         }

@@ -7,7 +7,10 @@ struct TodoDetailView: View {
     }
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: LayoutMetrics.vStackDetailSpacing) {
+            VStack(
+                alignment: .leading,
+                spacing: LayoutMetrics.vStackDetailSpacing
+            ) {
                 TextField(
                     Strings.detailTitlePlaceholder,
                     text: Binding(
@@ -21,7 +24,9 @@ struct TodoDetailView: View {
                 .padding(.top, LayoutMetrics.detailTopPadding)
                 Text(
                     presenter.createdAt.formatted(
-                        Date.FormatStyle().day().month(.twoDigits).year(.twoDigits).locale(Locale.enUSPOSIX)
+                        Date.FormatStyle().day().month(.twoDigits).year(
+                            .twoDigits
+                        ).locale(Locale.enUSPOSIX)
                     )
                 )
                 .font(AppFont.meta)
@@ -31,10 +36,18 @@ struct TodoDetailView: View {
                     if presenter.detail.trimmingCharacters(
                         in: .whitespacesAndNewlines
                     ).isEmpty {
-                        Text(Strings.detailNotesPlaceholder).font(AppFont.description)
-                            .foregroundColor(.brandLightGray)
-                            .padding(.horizontal, Metrics.detailNotesPlaceholderHorizontal)
-                            .padding(.vertical, Metrics.detailNotesPlaceholderVertical)
+                        Text(Strings.detailNotesPlaceholder).font(
+                            AppFont.description
+                        )
+                        .foregroundColor(.brandLightGray)
+                        .padding(
+                            .horizontal,
+                            Metrics.detailNotesPlaceholderHorizontal
+                        )
+                        .padding(
+                            .vertical,
+                            Metrics.detailNotesPlaceholderVertical
+                        )
                     }
                     TextEditor(
                         text: Binding(

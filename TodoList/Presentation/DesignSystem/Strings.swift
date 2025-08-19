@@ -1,7 +1,6 @@
 import Foundation
 import SwiftUI
 
-// ONLY user-facing localized (or localizable) strings & text formatting helpers.
 public enum Strings {
     public static let navTasksTitle: LocalizedStringKey = "Задачи"
     public static let searchPlaceholder: LocalizedStringKey = "Search"
